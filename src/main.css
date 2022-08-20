@@ -30,3 +30,19 @@ body {
   font-weight: 700;
   letter-spacing: 0.05em;
 }
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wordBoxColor {
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(227,100,255,1) 100%);
+  box-shadow: 2px 2px 50px 6px #000000;
+}
+
+.boxShadow {
+  box-shadow: 0px 0px 50px -10px #000000;
+}
