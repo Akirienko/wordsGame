@@ -4,8 +4,8 @@
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
     </div>
-    <div class="sing">
-      <button>Sing-in</button>
+    <div class="sign">
+      <router-link to="/sign-in"> Login </router-link>
     </div>
   </div>
 </template>
