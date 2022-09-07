@@ -48,6 +48,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { collection, onSnapshot, addDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+const user = auth.currentUser;
+
 import { db } from "@/firebase";
 
 const words = ref([]);
@@ -59,14 +64,21 @@ const wordTranslate = ref("");
 const newWord = ref("");
 const newWordTranslate = ref("");
 
-const addNewWord = () => {
-  addDoc(collection(db, "words"), {
-    word: newWord.value,
-    translating: newWordTranslate.value,
-  });
+// console.log(collection(db, "words");
 
-  newWord.value = "";
-  newWordTranslate.value = "";
+const addNewWord = () => {
+  if (user) {
+    console.log("yes user", user);
+    addDoc(collection(db, "words"), {
+      word: newWord.value,
+      translating: newWordTranslate.value,
+    });
+
+    newWord.value = "";
+    newWordTranslate.value = "";
+  } else {
+    console.log("no user", user);
+  }
 };
 
 //// query api

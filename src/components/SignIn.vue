@@ -21,9 +21,11 @@ const router = useRouter();
 const signIn = () => {
   // we also renamed this method
   const auth = getAuth();
+
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((data) => {
       console.log("Successfully logged in!", data);
+      // console.log(auth().currentUser);
       router.push("/about"); // redirect to the feed
     })
     .catch((error) => {
