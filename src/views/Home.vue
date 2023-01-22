@@ -23,7 +23,7 @@
         v-model="newWordTranslate"
       />
       <button
-        :disabled="!newWord && !newWordTranslate"
+        v-if="newWord && newWordTranslate"
         class="button w-40 h-8 mt-4 rounded-lg bg-green-400 border-solid border-2 border-black"
       >
         Add
@@ -37,7 +37,10 @@
       >
         <div class="overflow-hidden w-full h-full">
           <p class="capitalize text-lg absolute center flip-animate">
-            <span :data-hover="wordTranslate">{{ randomWord }} </span>
+            {{ randomWord }}
+          </p>
+          <p>
+            {{ wordTranslate }}
           </p>
         </div>
       </div>
@@ -48,10 +51,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { collection, onSnapshot, addDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-
-const auth = getAuth();
-const user = auth.currentUser;
+import { useUserStore } from "../stores/isUserExist";
 
 import { db } from "@/firebase";
 
@@ -64,37 +64,35 @@ const wordTranslate = ref("");
 const newWord = ref("");
 const newWordTranslate = ref("");
 
-// console.log(collection(db, "words");
+const storeUser = useUserStore();
+
+onMounted(() => {
+  // console.log("storeUser", storeUser.saveUser);
+  if (storeUser.isUserExist) {
+    console.log("YES USER", storeUser.isUserExist);
+  } else {
+    console.log("NO USER", storeUser.isUserExist);
+  }
+});
 
 const addNewWord = () => {
-  if (user) {
-    console.log("yes user", user);
+  if (storeUser.isUserExist) {
+    console.log("yes user", storeUser.isUserExist);
     addDoc(collection(db, "words"), {
       word: newWord.value,
-      translating: newWordTranslate.value,
+      translate: newWordTranslate.value,
     });
 
     newWord.value = "";
     newWordTranslate.value = "";
   } else {
-    console.log("no user", user);
+    console.log("no user", storeUser.isUserExist);
   }
 };
 
 //// query api
 onMounted(() => {
-  // const getWords = getDocs(collection(db, "words"));
-  // getWords.forEach((doc) => {
-  //   // words.value = doc.data();
-  //   const word = {
-  //     id: doc.id,
-  //     word: doc.data().word,
-  //     translate: doc.data().translate,
-  //   };
-  //   fbWords.push(word);
-  // });
   onSnapshot(collection(db, "words"), (querySnapshot) => {
-    // const cities = [];
     let fbWords = [];
     querySnapshot.forEach((doc) => {
       const word = {
@@ -104,7 +102,6 @@ onMounted(() => {
       };
       fbWords.push(word);
     });
-    // console.log("Current cities in CA: ", cities.join(", "));
     words.value = fbWords;
   });
 });
@@ -112,12 +109,13 @@ onMounted(() => {
 //// add random word
 
 const random = () => {
+  console.log(words);
   wordTranslate.value = "";
   randomWords.value =
     words.value[Math.floor(Math.random() * words.value.length)];
   randomWord.value = randomWords.value.word;
 
-  // console.log(randomWords.value);
+  console.log("randomWords.value", randomWords.value);
 };
 
 const translating = () => {
@@ -125,7 +123,7 @@ const translating = () => {
   wordTranslate.value = randomWords.value.translate;
 };
 
-//// Google translation
+//// Google translation (free version)
 
 // const encodedParams = new URLSearchParams();
 
@@ -159,41 +157,4 @@ const translating = () => {
 // };
 </script>
 
-<style scoped>
-.flip-animate:hover,
-.flip-animate:focus {
-  color: #222;
-}
-
-.flip-animate {
-  perspective: 1000px;
-}
-.flip-animate span {
-  position: relative;
-  display: inline-block;
-  padding: 0;
-  transition: transform 0.3s;
-  transform-origin: 50% 0;
-  transform-style: preserve-3d;
-}
-.flip-animate span:before {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  content: attr(data-hover);
-  transition: color 0.3s;
-  transform: rotateX(-90deg);
-  transform-origin: 50% 0;
-  text-align: center;
-}
-.flip-animate:hover span,
-.flip-animate:focus span {
-  transform: rotateX(90deg) translateY(-22px);
-}
-.flip-animate:hover span:before,
-.flip-animate:focus span:before {
-  color: #d24936;
-}
-</style>
+<style scoped></style>

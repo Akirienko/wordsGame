@@ -11,38 +11,22 @@ import { ref } from "vue";
 // import firebase from "firebase/firestore";
 // import { auth } from "firebase/firestore";
 // import { db, auth } from "@/firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "vue-router";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/isUserExist";
 const email = ref("");
 const password = ref("");
 const errMsg = ref();
-const router = useRouter();
+// const router = useRouter();
+
+const userStore = useUserStore();
 
 const signIn = () => {
-  // we also renamed this method
-  const auth = getAuth();
+  const user = {
+    email: email.value,
+    password: password.value,
+  };
 
-  signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((data) => {
-      console.log("Successfully logged in!", data);
-      // console.log(auth().currentUser);
-      router.push("/about"); // redirect to the feed
-    })
-    .catch((error) => {
-      switch (error.code) {
-        case "auth/invalid-email":
-          errMsg.value = "Invalid email";
-          break;
-        case "auth/user-not-found":
-          errMsg.value = "No account with that email was found";
-          break;
-        case "auth/wrong-password":
-          errMsg.value = "Incorrect password";
-          break;
-        default:
-          errMsg.value = "Email or password was incorrect";
-          break;
-      }
-    });
+  userStore.fatchUser(user);
 };
 </script>

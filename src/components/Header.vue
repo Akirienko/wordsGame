@@ -5,7 +5,12 @@
       <router-link to="/about">About</router-link>
     </div>
     <div class="sign">
-      <router-link to="/sign-in"> Login </router-link>
+      <router-link v-if="!user" to="/sign-in"> Login </router-link>
+      <router-link v-if="user" to="/sign-in"> Logout </router-link>
     </div>
   </div>
 </template>
+
+<script setup>
+import user from "../isUser";
+</script>

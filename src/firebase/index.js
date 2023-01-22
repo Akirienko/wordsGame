@@ -3,12 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC0ZR9E4N9mWp6EhUgNcPVrrEv3VYwztsw",
-  authDomain: "words-game-287a9.firebaseapp.com",
-  projectId: "words-game-287a9",
-  storageBucket: "words-game-287a9.appspot.com",
-  messagingSenderId: "661516540835",
-  appId: "1:661516540835:web:c56a9526e87127965f5816",
+  apiKey: "AIzaSyAx2kYVRmWEIftYBOI9ZieVd92c8tlrvl0",
+  authDomain: "words-game-522bb.firebaseapp.com",
+  projectId: "words-game-522bb",
+  storageBucket: "words-game-522bb.appspot.com",
+  messagingSenderId: "703242571559",
+  appId: "1:703242571559:web:47544e75148b77232d6302"
 };
 
 const app = initializeApp(firebaseConfig);
