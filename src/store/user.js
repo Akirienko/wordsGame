@@ -1,19 +1,17 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    currentUser: null,
+    currentUser: ref(false),
     errMsg: "",
   }),
   getters: {
-    // я повинен шось повкертати
     isUserExist: (state) => {
-      return !!state.currentUser || !!localStorage.getItem("is-users");
+      let user = ref(!!state.currentUser || !!localStorage.getItem("is-user"));
+      return user.value;
     },
-    // getUser: (state) => {
-    //   state.currentUser = localStorage.getItem("is-users");
-    // },
   },
   actions: {
     fatchUser(user) {
@@ -22,9 +20,7 @@ export const useUserStore = defineStore("user", {
       signInWithEmailAndPassword(auth, user.email, user.password)
         .then((data) => {
           console.log("Successfully logged in!", data);
-          // userStore.currentUser = data;d
           this.saveUser(data);
-          // localStorage.setItem("is-user", JSON.stringify(data));
         })
         .catch((error) => {
           switch (error.code) {
@@ -44,9 +40,13 @@ export const useUserStore = defineStore("user", {
         });
     },
     saveUser(data) {
-      this.currentUser = data.user;
-      localStorage.setItem("is-users", JSON.stringify(data));
-      console.log(data.user);
+      if (data.user) {
+        this.currentUser = true;
+      } else {
+        this.currentUser = false;
+      }
+      localStorage.setItem("is-user", JSON.stringify(data));
+      console.log("data.user", data.user);
     },
   },
 });

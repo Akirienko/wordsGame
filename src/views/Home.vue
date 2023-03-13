@@ -49,9 +49,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { collection, onSnapshot, addDoc } from "firebase/firestore";
-import { useUserStore } from "../stores/isUserExist";
+import { useUserStore } from "../store/user";
 
 import { db } from "@/firebase";
 
@@ -65,6 +65,11 @@ const newWord = ref("");
 const newWordTranslate = ref("");
 
 const storeUser = useUserStore();
+const isUser = ref(storeUser.isUserExist);
+
+watch(() => {
+  console.log("storeUser WATCH", isUser);
+});
 
 onMounted(() => {
   // console.log("storeUser", storeUser.saveUser);

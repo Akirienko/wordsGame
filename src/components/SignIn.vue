@@ -8,16 +8,10 @@
 
 <script setup>
 import { ref } from "vue";
-// import firebase from "firebase/firestore";
-// import { auth } from "firebase/firestore";
-// import { db, auth } from "@/firebase";
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-// import { useRouter } from "vue-router";
-import { useUserStore } from "../stores/isUserExist";
+import { useUserStore } from "../store/user";
 const email = ref("");
 const password = ref("");
 const errMsg = ref();
-// const router = useRouter();
 
 const userStore = useUserStore();
 

@@ -5,12 +5,24 @@
       <router-link to="/about">About</router-link>
     </div>
     <div class="sign">
-      <router-link v-if="!user" to="/sign-in"> Login </router-link>
-      <router-link v-if="user" to="/sign-in"> Logout </router-link>
+      <router-link :to="`${isUserExist ? '/' : 'sign-in'}`" @click="logout">
+        {{ `${isUserExist ? "Logout" : "Sing in"}` }}
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup>
-import user from "../isUser";
+import { useUserStore } from "../store/user";
+import { storeToRefs } from "pinia";
+
+const user = useUserStore();
+
+const { isUserExist } = storeToRefs(user);
+
+const logout = () => {
+  if (isUserExist.value) {
+    localStorage.removeItem("is-user");
+  }
+};
 </script>
